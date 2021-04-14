@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     int wayPointIndex = 0;
     void Start()
     {
-        gameObject.transform.position = waypoints[32].position;
+        gameObject.transform.position = waypoints[0].position;
     }
 
     void SetWayPoint()
@@ -22,13 +22,13 @@ public class PlayerController : MonoBehaviour
     public Transform GetWayPoint()
     {
         SetWayPoint();
-        return waypoints[wayPointIndex-1].transform;
+        return waypoints[wayPointIndex].transform;
     }
 
     public Transform GetWayPointBack()
     {
         SetWayPointBack();
-        return waypoints[wayPointIndex - 1].transform;
+        return waypoints[wayPointIndex].transform;
     }
     public int GetPoint()
     {

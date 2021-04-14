@@ -6,12 +6,13 @@ public class GameController : MonoBehaviour
 {
     [SerializeField]GameObject player1, player2,Dice;
     [SerializeField]Transform WinTransform;
-    [SerializeField] GameObject gOver;
+    [SerializeField] GameObject gOver,gStatus;
     DiceController diceController;
     PlayerController player1Controller;
     PlayerController player2Controller;
-    Text playerWinStatus;
+    Text playerWinStatus,gameStatus;
 
+    int winStatus;
     bool gameOver = false;
     int playerMove = 0;
     int DiceNo =0;
@@ -24,8 +25,19 @@ public class GameController : MonoBehaviour
         player2Controller = player2.GetComponent<PlayerController>();
         diceController.OnRoll += Move;
         playerWinStatus = gOver.GetComponentInChildren<Text>();
+        gameStatus = gStatus.GetComponentInChildren<Text>();
     }
 
+    private void Update()
+    {
+        int winStatus = checkWhoWins();
+        if (winStatus > 0)
+        {
+            gameOver = true;
+            gOver.SetActive(true);
+            playerWinStatus.text = "Player " + winStatus + " Wins!";
+        }
+    }
     int checkWhoWins()
     {
 
@@ -43,21 +55,23 @@ public class GameController : MonoBehaviour
         int playerPos;
         playerNo = choosePlayer();
         DiceNo = diceController.GetDiceNo();
-        for (int j = 0; j <= DiceNo; j++)
+        for (int j = 0; j < DiceNo; j++)
         {
             int winStatus = checkWhoWins();
             if (winStatus > 0)
             {
                 gameOver = true;
                 gOver.SetActive(true);
-                playerWinStatus.text = "Player " + winStatus + " Wins!";
+                playerWinStatus.text = "Congratulations!   Player " + winStatus + " Wins!";
             }
             if (playerNo == 1 && gameOver == false)
             {
+                gameStatus.text = "Player-1 Move "+ DiceNo + " Steps";
                 player1.transform.position = player1Controller.GetWayPoint().position;
             }
             else if(playerNo == -1 && gameOver == false)
             {
+                gameStatus.text = "Player-2 Move " + DiceNo + " Steps";
                 player2.transform.position = player2Controller.GetWayPoint().position;
             }
         }
@@ -66,10 +80,12 @@ public class GameController : MonoBehaviour
             playerPos = player1Controller.GetPoint();
             if ((playerPos % 5 == 0) && (playerPos % 10 == 0))
             {
+                gameStatus.text = "Penalty!!!! Player-1 Move 3 Step Back";
                 StartCoroutine(backMove(1));
             }
             else if(playerPos % 5 == 0)
             {
+                gameStatus.text = "Player-1 Gains Extra Chance";
                 chekk();
             }
         }
@@ -78,11 +94,12 @@ public class GameController : MonoBehaviour
             playerPos = player2Controller.GetPoint();
             if ((playerPos % 5 == 0) && (playerPos % 10 == 0))
             {
+                gameStatus.text = "Penalty!!!! Player-2 Move 3 Step Back";
                 StartCoroutine(backMove(2));
-                
             }
             else if (playerPos % 5 == 0)
             {
+                gameStatus.text = "Player-2 Gains Extra Chance";
                 chekk();
             }
         }

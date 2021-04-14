@@ -1,30 +1,43 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DiceController : MonoBehaviour
 {
     public event Action OnRoll;
-
+    [SerializeField] Button DicesButton;
     [SerializeField] GameObject[] dices;
     int DiceNo;
-    private void OnMouseDown()
+    bool canClick =true;
+
+    private void Update()
     {
-        StartCoroutine(RollTheDice());
+        DicesButton.onClick.AddListener(roll);
+    }
+
+    void roll()
+    {
+        if(canClick == true)
+        {
+            StartCoroutine(RollTheDice());
+        }
     }
 
     IEnumerator RollTheDice()
     {
-        DiceNo = UnityEngine.Random.Range(1, 6);
+        canClick = false;
+        DiceNo = UnityEngine.Random.Range(0, 5);
         dices[DiceNo].SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2.5f);
         dices[DiceNo].SetActive(false);
         OnRoll?.Invoke();
+        canClick = true;
     }
 
     public int GetDiceNo()
     {
-        return DiceNo;
+        return (DiceNo+1);
     }
 
 }
