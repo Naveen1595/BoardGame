@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
         diceController = Dice.GetComponent<DiceController>();
         player1Controller = player1.GetComponent<PlayerController>();
         player2Controller = player2.GetComponent<PlayerController>();
-        diceController.OnRoll += Move;
+        //diceController.OnRoll += Move;
         playerWinStatus = gOver.GetComponentInChildren<Text>();
     }
 
